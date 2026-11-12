@@ -1,3 +1,4 @@
+import "../utils/web-alert";
 import { Stack, usePathname } from "expo-router";
 import {
   StyleSheet,
