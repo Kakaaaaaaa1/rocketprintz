@@ -200,7 +200,7 @@ export default function Header() {
               activeIcon="play-circle"
               active={isActive("running")}
               onPress={() => {
-                router.push("/(operator)/running");
+                router.push("/(supervisor)/running");
               }}
             />
           )}
