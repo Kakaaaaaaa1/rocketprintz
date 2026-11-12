@@ -148,7 +148,7 @@ export default function AdminDashboard() {
   );
 
   const lowStockMaterials = materials.filter(
-    (material) => material.stock <= 10 (material.minimumStock ?? 0)
+    (material) => material.stock <= (material.minimumStock ?? 0)
   );
 
   if (loading) {
