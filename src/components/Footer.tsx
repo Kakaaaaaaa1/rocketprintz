@@ -25,19 +25,7 @@ export default function Footer() {
         onPress={() => router.push("/")}
       />
 
-      {/* CAMERA */}
-
-      <FooterItem
-        label="Camera"
-        icon="camera-outline"
-        active={pathname.includes("camera")}
-        onPress={() =>
-          router.push("/camera")
-        }
-        center
-      />
-
-      {/* PROFILE */}
+        {/* PROFILE */}
 
       <FooterItem
         label="Profile"
