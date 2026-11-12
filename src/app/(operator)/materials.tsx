@@ -62,10 +62,7 @@ export default function OperatorMaterials() {
               typeof data.stock === "number"
                 ? data.stock
                 : Number(data.stock || 0),
-            minStock:
-              typeof data.minStock === "number"
-                ? data.minStock
-                : Number(data.minStock || 0),
+            minStock: Number(data.minimumStock ?? data.minStock ?? 0),
             description: data.description || "",
           };
         });
