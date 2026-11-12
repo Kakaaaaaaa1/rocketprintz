@@ -188,16 +188,6 @@ function MobileFooter({
       />
 
       <MobileFooterItem
-        label="Camera"
-        icon="camera-outline"
-        active={pathname.includes("camera")}
-        onPress={() =>
-          router.push("/camera")
-        }
-        center
-      />
-
-      <MobileFooterItem
         label="Profile"
         icon="person-outline"
         active={pathname.includes("profile")}
