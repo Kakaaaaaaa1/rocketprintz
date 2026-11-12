@@ -38,6 +38,7 @@ type Material = {
   id: string;
   name: string;
   stock: number;
+  minimumStock?: number;
 };
 
 type UserProfile = {
@@ -147,7 +148,7 @@ export default function AdminDashboard() {
   );
 
   const lowStockMaterials = materials.filter(
-    (material) => material.stock <= 10
+    (material) => material.stock <= 10 (material.minimumStock ?? 0)
   );
 
   if (loading) {
