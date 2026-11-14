@@ -134,10 +134,10 @@ export default function Header() {
           {/* ORDERS */}
 
           <HeaderItem
-            label="Orders"
-            icon="receipt-outline"
-            activeIcon="receipt"
-            active={isActive("orders")}
+            label={userRole === "operator" ? "Running" : "Orders"}
+            icon={userRole === "operator" ? "play-circle-outline" : "receipt-outline"}
+            activeIcon={userRole === "operator" ? "play-circle" : "receipt"}
+            active={userRole === "operator" ? isActive("running") : isActive("orders")}
             onPress={() => {
               if (userRole === "supervisor") {
                 router.push("/(supervisor)/orders");
