@@ -516,7 +516,7 @@ export default function OperatorRunning() {
                   styles.plannedBadgeText
                 }
               >
-                Planned
+                Direncanakan
               </Text>
             </View>
           ) : (
@@ -536,7 +536,7 @@ export default function OperatorRunning() {
                   styles.runningText
                 }
               >
-                Running
+                Sedang Berjalan
               </Text>
             </View>
           )}
@@ -821,7 +821,7 @@ export default function OperatorRunning() {
             <Text
               style={styles.totalLabel}
             >
-              Running
+              Sedang Berjalan
             </Text>
           </View>
         </View>

@@ -15,6 +15,8 @@ import {
     View,
 } from "react-native";
 
+import SearchBar, { matchesSearch } from "../SearchBar";
+
 export type PlanningStatus =
   | "planned"
   | "running"
@@ -211,6 +213,19 @@ export default function PlanningUI({
   setActivePicker,
 }: Props) {
   const isMobile = width < 768;
+
+  const [search, setSearch] = React.useState("");
+
+  const filteredPlanning = planning.filter((item) =>
+    matchesSearch(
+      search,
+      item.orderCode,
+      item.customerName,
+      item.product,
+      item.machine,
+      item.operatorName
+    )
+  );
 
   // ======================================================
   // DATE HELPERS
@@ -547,8 +562,20 @@ export default function PlanningUI({
           LIST
       ================================================== */}
 
+      <View
+        style={{
+          paddingHorizontal: isMobile ? 14 : 24,
+        }}
+      >
+        <SearchBar
+          value={search}
+          onChangeText={setSearch}
+          placeholder="Cari kode order, customer, mesin, atau operator..."
+        />
+      </View>
+
       <FlatList
-        data={planning}
+        data={filteredPlanning}
         keyExtractor={(item) =>
           item.id
         }
@@ -586,7 +613,7 @@ export default function PlanningUI({
                 styles.emptyTitle
               }
             >
-              Belum ada planning
+              {search ? "Planning tidak ditemukan" : "Belum ada planning"}
             </Text>
 
             <Text
@@ -594,9 +621,9 @@ export default function PlanningUI({
                 styles.emptyText
               }
             >
-              Buat jadwal produksi pertama
-              Anda untuk mulai mengelola
-              antrean.
+              {search
+                ? "Coba gunakan kata kunci yang berbeda."
+                : "Buat jadwal produksi pertama Anda untuk mulai mengelola antrean."}
             </Text>
           </View>
         }

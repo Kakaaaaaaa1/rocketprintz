@@ -90,15 +90,7 @@ export default function ProfilePage() {
     try {
       setLogoutLoading(true);
 
-      console.log(
-        "Profile: mulai logout..."
-      );
-
       await logout();
-
-      console.log(
-        "Profile: logout berhasil"
-      );
 
       setLogoutModalVisible(false);
 

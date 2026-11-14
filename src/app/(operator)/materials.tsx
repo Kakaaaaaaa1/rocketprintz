@@ -6,7 +6,6 @@ import {
   FlatList,
   StyleSheet,
   Text,
-  TextInput,
   View,
   useWindowDimensions
 } from "react-native";
@@ -18,6 +17,7 @@ import {
   query,
 } from "firebase/firestore";
 
+import SearchBar from "../../components/SearchBar";
 import { db } from "../../firebase/config";
 
 type Material = {
@@ -274,19 +274,11 @@ export default function OperatorMaterials() {
         </View>
 
         {/* SEARCH */}
-        <View style={styles.searchContainer}>
-          <Text style={styles.searchIcon}>
-            🔍
-          </Text>
-
-          <TextInput
-            value={search}
-            onChangeText={setSearch}
-            placeholder="Cari material atau kode..."
-            placeholderTextColor="#9ca3af"
-            style={styles.searchInput}
-          />
-        </View>
+        <SearchBar
+          value={search}
+          onChangeText={setSearch}
+          placeholder="Cari material atau kode..."
+        />
 
         {/* CONTENT */}
         {loading ? (
@@ -390,31 +382,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#111111",
   },
-
-  searchContainer: {
-    height: 48,
-    backgroundColor: "#ffffff",
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#e5e5e5",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 14,
-    marginBottom: 16,
-  },
-
-  searchIcon: {
-    fontSize: 16,
-    marginRight: 9,
-  },
-
-  searchInput: {
-    flex: 1,
-    height: "100%",
-    color: "#111111",
-    fontSize: 14,
-    outlineStyle: "none",
-  } as any,
 
   list: {
     paddingBottom: 30,

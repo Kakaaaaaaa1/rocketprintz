@@ -103,7 +103,7 @@ export default function OperatorDashboard() {
         <ActivityIndicator size="small" />
 
         <Text style={styles.loadingText}>
-          Loading dashboard...
+          Memuat dashboard...
         </Text>
       </View>
     );
@@ -133,7 +133,7 @@ export default function OperatorDashboard() {
           </Text>
 
           <Text style={styles.subtitle}>
-            Production workspace & monitoring
+            Ruang kerja dan pemantauan produksi
           </Text>
         </View>
 
@@ -141,7 +141,7 @@ export default function OperatorDashboard() {
           <View style={styles.onlineDot} />
 
           <Text style={styles.onlineText}>
-            System Online
+            Sistem Aktif
           </Text>
         </View>
       </View>
@@ -158,7 +158,7 @@ export default function OperatorDashboard() {
           icon="calendar-outline"
           label="Planning"
           value={planning.length}
-          description={`${planned.length} scheduled`}
+          description={`${planned.length} direncanakan`}
           onPress={() =>
             router.push("/(operator)/planning")
           }
@@ -166,9 +166,9 @@ export default function OperatorDashboard() {
 
         <StatCard
           icon="play-circle-outline"
-          label="Running"
+          label="Sedang Berjalan"
           value={running.length}
-          description="Active production"
+          description="Produksi aktif"
           onPress={() =>
             router.push("/(operator)/running")
           }
@@ -176,9 +176,9 @@ export default function OperatorDashboard() {
 
         <StatCard
           icon="checkmark-circle-outline"
-          label="Completed"
+          label="Selesai"
           value={completed.length}
-          description="Finished production"
+          description="Selesai diproduksi"
           onPress={() =>
             router.push("/(operator)/running")
           }
@@ -188,7 +188,7 @@ export default function OperatorDashboard() {
           icon="layers-outline"
           label="Materials"
           value={orders.length}
-          description="Production resources"
+          description="Bahan produksi"
           onPress={() =>
             router.push("/(operator)/materials")
           }
@@ -200,11 +200,11 @@ export default function OperatorDashboard() {
       <View style={styles.sectionHeader}>
         <View>
           <Text style={styles.sectionTitle}>
-            Production
+            Produksi
           </Text>
 
           <Text style={styles.sectionSubtitle}>
-            Currently assigned to production
+            Produksi yang ditugaskan kepada Anda
           </Text>
         </View>
 
@@ -215,7 +215,7 @@ export default function OperatorDashboard() {
           }
         >
           <Text style={styles.viewButtonText}>
-            View all
+            Lihat semua
           </Text>
 
           <Ionicons
@@ -249,11 +249,11 @@ export default function OperatorDashboard() {
       <View style={styles.sectionHeader}>
         <View>
           <Text style={styles.sectionTitle}>
-            Overview
+            Ringkasan
           </Text>
 
           <Text style={styles.sectionSubtitle}>
-            Your production status
+            Status produksi Anda
           </Text>
         </View>
       </View>
@@ -266,27 +266,27 @@ export default function OperatorDashboard() {
       >
         <SummaryRow
           icon="time-outline"
-          title="Scheduled"
+          title="Direncanakan"
           value={planned.length}
-          description="Waiting for production"
+          description="Menunggu produksi"
         />
 
         <View style={styles.summaryDivider} />
 
         <SummaryRow
           icon="play-outline"
-          title="In Production"
+          title="Sedang Berjalan"
           value={running.length}
-          description="Currently running"
+          description="Sedang diproduksi"
         />
 
         <View style={styles.summaryDivider} />
 
         <SummaryRow
           icon="checkmark-outline"
-          title="Completed"
+          title="Selesai"
           value={completed.length}
-          description="Production finished"
+          description="Produksi selesai"
         />
       </View>
     </ScrollView>
@@ -417,7 +417,7 @@ function ProductionCard({
           <View style={styles.runningDot} />
 
           <Text style={styles.runningText}>
-            Running
+            Sedang Berjalan
           </Text>
         </View>
       </View>
@@ -425,11 +425,11 @@ function ProductionCard({
       <View style={styles.progressSection}>
         <View style={styles.progressHeader}>
           <Text style={styles.progressLabel}>
-            Production progress
+            Progres produksi
           </Text>
 
           <Text style={styles.progressPercent}>
-            Active
+            Aktif
           </Text>
         </View>
 
@@ -441,7 +441,7 @@ function ProductionCard({
       <View style={styles.productionInfo}>
         <InfoItem
           icon="hardware-chip-outline"
-          label="Machine"
+          label="Mesin"
           value={item.machine || "-"}
         />
 
@@ -453,7 +453,7 @@ function ProductionCard({
 
         <InfoItem
           icon="layers-outline"
-          label="Quantity"
+          label="Jumlah"
           value={String(order?.quantity ?? "-")}
         />
       </View>
@@ -556,11 +556,11 @@ function EmptyProduction() {
       </View>
 
       <Text style={styles.emptyTitle}>
-        No active production
+        Tidak ada produksi aktif
       </Text>
 
       <Text style={styles.emptyText}>
-        There is currently no production running.
+        Saat ini tidak ada produksi yang sedang berjalan.
       </Text>
     </View>
   );

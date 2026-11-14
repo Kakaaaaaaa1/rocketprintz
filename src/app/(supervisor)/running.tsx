@@ -118,7 +118,7 @@ export default function SupervisorRunning() {
           </Text>
 
           <Text style={styles.runningLabel}>
-            Active
+            Aktif
           </Text>
         </View>
       </View>
@@ -161,7 +161,7 @@ export default function SupervisorRunning() {
                     <View style={styles.liveDot} />
 
                     <Text style={styles.liveText}>
-                      RUNNING
+                      BERJALAN
                     </Text>
                   </View>
 
@@ -182,11 +182,11 @@ export default function SupervisorRunning() {
                 <View style={styles.progressContainer}>
                   <View style={styles.progressHeader}>
                     <Text style={styles.progressLabel}>
-                      Production
+                      Produksi
                     </Text>
 
                     <Text style={styles.progressValue}>
-                      Active
+                      Aktif
                     </Text>
                   </View>
 
@@ -220,7 +220,7 @@ export default function SupervisorRunning() {
 
                   <View>
                     <Text style={styles.label}>
-                      Schedule
+                      Jadwal
                     </Text>
 
                     <Text style={styles.value}>

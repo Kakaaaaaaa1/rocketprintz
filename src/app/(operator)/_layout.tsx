@@ -1,6 +1,7 @@
 import {
     Redirect,
     Stack,
+    usePathname,
 } from "expo-router";
 
 import {
@@ -12,6 +13,8 @@ import {
     useAuth,
 } from "../../contexts/AuthContext";
 
+import { getRoleRedirect } from "../../utils/role-route";
+
 export default function OperatorLayout() {
 
   const {
@@ -19,6 +22,8 @@ export default function OperatorLayout() {
     profile,
     loading,
   } = useAuth();
+
+  const pathname = usePathname();
 
   if (loading) {
 
@@ -48,7 +53,7 @@ export default function OperatorLayout() {
   ) {
 
     return (
-      <Redirect href="/" />
+      <Redirect href={getRoleRedirect(profile?.role, pathname)} />
     );
   }
 

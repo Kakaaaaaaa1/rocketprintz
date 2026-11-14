@@ -22,6 +22,7 @@ import {
 
 import * as Print from "expo-print";
 
+import SearchBar, { matchesSearch } from "../../components/SearchBar";
 import { db } from "../../firebase/config";
 
 import {
@@ -70,6 +71,21 @@ export default function SupervisorPlanning() {
 
   // Menyimpan ID planning yang sedang diprint
   const [printingId, setPrintingId] = useState<string | null>(null);
+
+  const [search, setSearch] = useState("");
+
+  const filteredPlanning = planning.filter((item) => {
+    const order = orders.find((o) => o.id === item.orderId);
+
+    return matchesSearch(
+      search,
+      order?.orderCode,
+      order?.customerName,
+      order?.product,
+      item.machine,
+      item.operatorName
+    );
+  });
 
 
   // ===================================================
@@ -185,22 +201,22 @@ export default function SupervisorPlanning() {
   const getStatusLabel = (status: string) => {
     switch (status) {
       case "running":
-        return "Running";
+        return "Sedang Berjalan";
 
       case "completed":
-        return "Completed";
+        return "Selesai";
 
       case "cancelled":
-        return "Cancelled";
+        return "Dibatalkan";
 
       case "planned":
-        return "Planned";
+        return "Direncanakan";
 
       case "pending":
-        return "Pending";
+        return "Menunggu";
 
       default:
-        return status || "Pending";
+        return status || "Menunggu";
     }
   };
 
@@ -447,24 +463,32 @@ export default function SupervisorPlanning() {
       </View>
 
 
+      <SearchBar
+        value={search}
+        onChangeText={setSearch}
+        placeholder="Cari kode order, customer, mesin, atau operator..."
+      />
+
       {/* =================================================
           EMPTY
       ================================================= */}
 
-      {planning.length === 0 ? (
+      {filteredPlanning.length === 0 ? (
 
         <View style={styles.empty}>
 
           <Text
             style={styles.emptyTitle}
           >
-            Belum ada planning
+            {search ? "Planning tidak ditemukan" : "Belum ada planning"}
           </Text>
 
           <Text
             style={styles.emptyText}
           >
-            Jadwal produksi belum tersedia.
+            {search
+              ? "Coba gunakan kata kunci yang berbeda."
+              : "Jadwal produksi belum tersedia."}
           </Text>
 
         </View>
@@ -483,7 +507,7 @@ export default function SupervisorPlanning() {
           ]}
         >
 
-          {planning.map((item) => {
+          {filteredPlanning.map((item) => {
 
             const order =
               getOrder(item.orderId);

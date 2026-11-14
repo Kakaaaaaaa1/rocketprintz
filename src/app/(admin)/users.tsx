@@ -23,6 +23,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
+import SearchBar, { matchesSearch } from "../../components/SearchBar";
 import { db } from "../../firebase/config";
 
 interface UserProfile {
@@ -37,6 +38,11 @@ const roles = ["admin", "operator", "supervisor"] as const;
 export default function AdminUsers() {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  const filteredUsers = users.filter((user) =>
+    matchesSearch(search, user.name, user.email, user.role)
+  );
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
@@ -215,11 +221,7 @@ export default function AdminUsers() {
     try {
       setDeletingId(user.id);
 
-      console.log("Menghapus user:", user.id);
-
       await deleteDoc(doc(db, "users", user.id));
-
-      console.log("User berhasil dihapus:", user.id);
 
       /*
        * Tidak perlu setUsers secara manual.
@@ -308,10 +310,16 @@ export default function AdminUsers() {
         </Text>
       </View>
 
+      <SearchBar
+        value={search}
+        onChangeText={setSearch}
+        placeholder="Cari nama, email, atau peran..."
+      />
+
       {/* USER LIST */}
 
       <FlatList
-        data={users}
+        data={filteredUsers}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}
@@ -324,7 +332,7 @@ export default function AdminUsers() {
             />
 
             <Text style={styles.emptyText}>
-              Belum ada pengguna terdaftar.
+              {search ? "Pengguna tidak ditemukan." : "Belum ada pengguna terdaftar."}
             </Text>
           </View>
         }

@@ -22,6 +22,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
+import SearchBar, { matchesSearch } from "../../components/SearchBar";
 import { db } from "../../firebase/config";
 
 interface Material {
@@ -42,6 +43,11 @@ const initialForm = {
 export default function AdminMaterials() {
   const [materials, setMaterials] = useState<Material[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  const filteredMaterials = materials.filter((material) =>
+    matchesSearch(search, material.name, material.unit)
+  );
   const [modalVisible, setModalVisible] = useState(false);
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -101,14 +107,33 @@ export default function AdminMaterials() {
       return;
     }
 
+    // Stok dan minimum stok harus angka 0 atau lebih
+    // (koma diperbolehkan sebagai tanda desimal)
+    const stockNumber = Number(form.stock.trim().replace(",", "."));
+    const minimumText = form.minimumStock.trim().replace(",", ".");
+    const minimumNumber = minimumText ? Number(minimumText) : 0;
+
+    if (
+      !Number.isFinite(stockNumber) ||
+      stockNumber < 0 ||
+      !Number.isFinite(minimumNumber) ||
+      minimumNumber < 0
+    ) {
+      Alert.alert(
+        "Stok tidak valid",
+        "Stok dan minimum stok harus berupa angka 0 atau lebih."
+      );
+      return;
+    }
+
     try {
       setSaving(true);
 
       const data = {
         name: form.name.trim(),
-        stock: Number(form.stock),
+        stock: stockNumber,
         unit: form.unit.trim(),
-        minimumStock: Number(form.minimumStock) || 0,
+        minimumStock: minimumNumber,
         updatedAt: serverTimestamp(),
       };
 
@@ -179,19 +204,28 @@ export default function AdminMaterials() {
         </Pressable>
       </View>
 
+      <SearchBar
+        value={search}
+        onChangeText={setSearch}
+        placeholder="Cari nama bahan..."
+      />
+
       {/* MATERIALS LIST */}
       <FlatList
-        data={materials}
+        data={filteredMaterials}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="cube-outline" size={48} color="#cbd5e1" />
-            <Text style={styles.emptyText}>Belum ada data bahan produksi.</Text>
+            <Text style={styles.emptyText}>
+              {search ? "Bahan tidak ditemukan." : "Belum ada data bahan produksi."}
+            </Text>
           </View>
         }
         renderItem={({ item }) => {
+          const outOfStock = item.stock <= 0;
           const lowStock = item.stock <= item.minimumStock;
 
           return (
@@ -209,16 +243,24 @@ export default function AdminMaterials() {
                 <View
                   style={[
                     styles.statusBadge,
-                    lowStock ? styles.warningBadge : styles.safeBadge,
+                    outOfStock
+                      ? styles.warningBadge
+                      : lowStock
+                        ? styles.lowBadge
+                        : styles.safeBadge,
                   ]}
                 >
                   <Text
                     style={[
                       styles.statusText,
-                      lowStock ? styles.warningText : styles.safeText,
+                      outOfStock
+                        ? styles.warningText
+                        : lowStock
+                          ? styles.lowText
+                          : styles.safeText,
                     ]}
                   >
-                    {lowStock ? "Stok Rendah" : "Aman"}
+                    {outOfStock ? "Habis" : lowStock ? "Stok Menipis" : "Tersedia"}
                   </Text>
                 </View>
               </View>
@@ -515,6 +557,9 @@ const styles = StyleSheet.create({
   warningBadge: {
     backgroundColor: "#fef2f2",
   },
+  lowBadge: {
+    backgroundColor: "#fffbeb",
+  },
 
   safeBadge: {
     backgroundColor: "#f0fdf4",
@@ -527,6 +572,9 @@ const styles = StyleSheet.create({
 
   warningText: {
     color: "#ef4444",
+  },
+  lowText: {
+    color: "#b45309",
   },
 
   safeText: {

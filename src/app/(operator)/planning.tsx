@@ -219,13 +219,13 @@ export default function OperatorPlanning() {
   const getStatusLabel = (status: string) => {
     switch (status) {
       case "planned":
-        return "Planned";
+        return "Direncanakan";
 
       case "running":
-        return "Running";
+        return "Sedang Berjalan";
 
       case "completed":
-        return "Completed";
+        return "Selesai";
 
       default:
         return status;
@@ -403,7 +403,7 @@ export default function OperatorPlanning() {
 
           <View style={styles.statCard}>
             <Text style={styles.statLabel}>
-              Planned
+              Direncanakan
             </Text>
 
             <Text style={styles.statValue}>
@@ -413,7 +413,7 @@ export default function OperatorPlanning() {
 
           <View style={styles.statCard}>
             <Text style={styles.statLabel}>
-              Running
+              Sedang Berjalan
             </Text>
 
             <Text style={styles.statValue}>
@@ -423,7 +423,7 @@ export default function OperatorPlanning() {
 
           <View style={styles.statCard}>
             <Text style={styles.statLabel}>
-              Completed
+              Selesai
             </Text>
 
             <Text style={styles.statValue}>

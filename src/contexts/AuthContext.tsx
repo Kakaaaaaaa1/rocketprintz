@@ -58,31 +58,6 @@ function normalizeLoginInput(value: string) {
 }
 
 /* =========================
-   GET USER PROFILE
-========================= */
-
-async function getUserProfile(
-  uid: string
-): Promise<UserProfile | null> {
-  const userRef = doc(db, "users", uid);
-
-  const snapshot = await getDoc(userRef);
-
-  if (!snapshot.exists()) {
-    return null;
-  }
-
-  const data = snapshot.data();
-
-  return {
-    uid,
-    name: data.name ?? "",
-    email: data.email ?? "",
-    role: data.role as UserRole,
-  };
-}
-
-/* =========================
    AUTH PROVIDER
 ========================= */
 
@@ -113,13 +88,6 @@ export function AuthProvider({
       onAuthStateChanged(
         auth,
         (firebaseUser) => {
-          console.log(
-            "AUTH STATE:",
-            firebaseUser
-              ? firebaseUser.email
-              : "LOGGED OUT"
-          );
-
           /* =========================
              CLEANUP PROFILE LISTENER
           ========================= */
@@ -134,10 +102,6 @@ export function AuthProvider({
           ========================= */
 
           if (!firebaseUser) {
-            console.log(
-              "AuthContext: user logout"
-            );
-
             setUser(null);
             setProfile(null);
             setLoading(false);
@@ -167,10 +131,6 @@ export function AuthProvider({
               userRef,
               (snapshot) => {
                 if (!snapshot.exists()) {
-                  console.log(
-                    "Profile tidak ditemukan"
-                  );
-
                   setProfile(null);
                   setLoading(false);
 
@@ -195,11 +155,6 @@ export function AuthProvider({
                     role:
                       data.role as UserRole,
                   };
-
-                console.log(
-                  "Profile loaded:",
-                  updatedProfile
-                );
 
                 setProfile(
                   updatedProfile
@@ -299,21 +254,6 @@ export function AuthProvider({
 
   const logout = async () => {
     try {
-      console.log(
-        "AuthContext: mulai logout..."
-      );
-
-      /*
-       * Hentikan listener profile
-       * sebelum logout.
-       */
-      if (auth.currentUser) {
-        console.log(
-          "Current user:",
-          auth.currentUser.email
-        );
-      }
-
       /*
        * Logout dari Firebase.
        *
@@ -330,9 +270,6 @@ export function AuthProvider({
       setProfile(null);
       setLoading(false);
 
-      console.log(
-        "AuthContext: logout berhasil"
-      );
     } catch (error) {
       console.error(
         "AuthContext: logout error:",

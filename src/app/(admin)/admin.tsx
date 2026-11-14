@@ -157,7 +157,7 @@ export default function AdminDashboard() {
         <ActivityIndicator size="small" />
 
         <Text style={styles.loadingText}>
-          Loading dashboard...
+          Memuat dashboard...
         </Text>
       </View>
     );
@@ -187,7 +187,7 @@ export default function AdminDashboard() {
           </Text>
 
           <Text style={styles.subtitle}>
-            Management & production overview
+            Ringkasan manajemen dan produksi
           </Text>
         </View>
 
@@ -195,7 +195,7 @@ export default function AdminDashboard() {
           <View style={styles.onlineDot} />
 
           <Text style={styles.onlineText}>
-            System Online
+            Sistem Aktif
           </Text>
         </View>
       </View>
@@ -210,12 +210,12 @@ export default function AdminDashboard() {
       >
         <StatCard
           icon="document-text-outline"
-          label="Total Orders"
+          label="Total Order"
           value={orders.length}
           description={
             pendingOrders.length > 0
               ? `${pendingOrders.length} pending`
-              : "All orders"
+              : "Semua order"
           }
           onPress={() =>
             router.push("/(admin)/orders")
@@ -226,7 +226,7 @@ export default function AdminDashboard() {
           icon="calendar-outline"
           label="Planning"
           value={planning.length}
-          description={`${planned.length} scheduled`}
+          description={`${planned.length} direncanakan`}
           onPress={() =>
             router.push("/(admin)/planning")
           }
@@ -238,8 +238,8 @@ export default function AdminDashboard() {
           value={materials.length}
           description={
             lowStockMaterials.length > 0
-              ? `${lowStockMaterials.length} low stock`
-              : "Stock available"
+              ? `${lowStockMaterials.length} stok menipis`
+              : "Stok tersedia"
           }
           onPress={() =>
             router.push("/(admin)/materials")
@@ -250,7 +250,7 @@ export default function AdminDashboard() {
           icon="people-outline"
           label="Users"
           value={users.length}
-          description="Registered users"
+          description="Pengguna terdaftar"
           onPress={() =>
             router.push("/(admin)/users")
           }
@@ -262,11 +262,11 @@ export default function AdminDashboard() {
       <View style={styles.sectionHeader}>
         <View>
           <Text style={styles.sectionTitle}>
-            Production
+            Produksi
           </Text>
 
           <Text style={styles.sectionSubtitle}>
-            Current production status
+            Status produksi saat ini
           </Text>
         </View>
 
@@ -277,7 +277,7 @@ export default function AdminDashboard() {
           }
         >
           <Text style={styles.viewButtonText}>
-            View planning
+            Lihat planning
           </Text>
 
           <Ionicons
@@ -309,11 +309,11 @@ export default function AdminDashboard() {
       <View style={styles.sectionHeader}>
         <View>
           <Text style={styles.sectionTitle}>
-            Overview
+            Ringkasan
           </Text>
 
           <Text style={styles.sectionSubtitle}>
-            Production and system summary
+            Ringkasan produksi dan sistem
           </Text>
         </View>
       </View>
@@ -326,36 +326,36 @@ export default function AdminDashboard() {
       >
         <SummaryRow
           icon="time-outline"
-          title="Scheduled"
+          title="Direncanakan"
           value={planned.length}
-          description="Waiting for production"
+          description="Menunggu produksi"
         />
 
         <View style={styles.summaryDivider} />
 
         <SummaryRow
           icon="play-outline"
-          title="In Production"
+          title="Sedang Berjalan"
           value={running.length}
-          description="Currently running"
+          description="Sedang diproduksi"
         />
 
         <View style={styles.summaryDivider} />
 
         <SummaryRow
           icon="checkmark-outline"
-          title="Completed"
+          title="Selesai"
           value={completed.length}
-          description="Production finished"
+          description="Produksi selesai"
         />
 
         <View style={styles.summaryDivider} />
 
         <SummaryRow
           icon="alert-circle-outline"
-          title="Low Stock"
+          title="Stok Menipis"
           value={lowStockMaterials.length}
-          description="Materials need attention"
+          description="Bahan perlu diperhatikan"
         />
       </View>
 
@@ -364,11 +364,11 @@ export default function AdminDashboard() {
       <View style={styles.sectionHeader}>
         <View>
           <Text style={styles.sectionTitle}>
-            Management
+            Manajemen
           </Text>
 
           <Text style={styles.sectionSubtitle}>
-            Quick access
+            Akses cepat
           </Text>
         </View>
       </View>
@@ -542,7 +542,7 @@ function ProductionCard({
           <View style={styles.runningDot} />
 
           <Text style={styles.runningText}>
-            Running
+            Sedang Berjalan
           </Text>
         </View>
       </View>
@@ -550,11 +550,11 @@ function ProductionCard({
       <View style={styles.progressSection}>
         <View style={styles.progressHeader}>
           <Text style={styles.progressLabel}>
-            Production progress
+            Progres produksi
           </Text>
 
           <Text style={styles.progressPercent}>
-            Active
+            Aktif
           </Text>
         </View>
 
@@ -566,7 +566,7 @@ function ProductionCard({
       <View style={styles.productionInfo}>
         <InfoItem
           icon="hardware-chip-outline"
-          label="Machine"
+          label="Mesin"
           value={item.machine || "-"}
         />
 
@@ -578,7 +578,7 @@ function ProductionCard({
 
         <InfoItem
           icon="layers-outline"
-          label="Quantity"
+          label="Jumlah"
           value={String(
             order?.quantity ?? "-"
           )}
@@ -733,11 +733,11 @@ function EmptyProduction() {
       </View>
 
       <Text style={styles.emptyTitle}>
-        No active production
+        Tidak ada produksi aktif
       </Text>
 
       <Text style={styles.emptyText}>
-        There is currently no production running.
+        Saat ini tidak ada produksi yang sedang berjalan.
       </Text>
     </View>
   );

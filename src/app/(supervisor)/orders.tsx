@@ -15,6 +15,7 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
+import SearchBar, { matchesSearch } from "../../components/SearchBar";
 import { db } from "../../firebase/config";
 
 type Order = {
@@ -34,6 +35,11 @@ export default function SupervisorOrders() {
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  const filteredOrders = orders.filter((order) =>
+    matchesSearch(search, order.orderCode, order.customerName, order.product)
+  );
 
   useEffect(() => {
     const q = query(
@@ -146,15 +152,23 @@ export default function SupervisorOrders() {
         </View>
       </View>
 
+      <SearchBar
+        value={search}
+        onChangeText={setSearch}
+        placeholder="Cari kode order, customer, atau produk..."
+      />
+
       {/* EMPTY */}
-      {orders.length === 0 ? (
+      {filteredOrders.length === 0 ? (
         <View style={styles.empty}>
           <Text style={styles.emptyTitle}>
-            Belum ada order
+            {search ? "Order tidak ditemukan" : "Belum ada order"}
           </Text>
 
           <Text style={styles.emptyText}>
-            Data order akan muncul di halaman ini.
+            {search
+              ? "Coba gunakan kata kunci yang berbeda."
+              : "Data order akan muncul di halaman ini."}
           </Text>
         </View>
       ) : (
@@ -165,7 +179,7 @@ export default function SupervisorOrders() {
             isDesktop && styles.gridDesktop,
           ]}
         >
-          {orders.map((order) => {
+          {filteredOrders.map((order) => {
             const displayOrderCode =
               order.orderCode ||
               `SO-${order.id.slice(0, 6).toUpperCase()}`;

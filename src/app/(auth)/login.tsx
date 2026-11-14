@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -23,8 +23,11 @@ export default function LoginScreen() {
   const [error, setError] = useState("");
 
   const [focusedInput, setFocusedInput] = useState<"identifier" | "password" | null>(null);
+  const passwordRef = useRef<TextInput>(null);
 
   const handleLogin = async () => {
+    if (loading) return;
+
     setError("");
 
     if (!identifier.trim()) {
@@ -107,6 +110,8 @@ export default function LoginScreen() {
                 onChangeText={setIdentifier}
                 autoCapitalize="none"
                 autoCorrect={false}
+                returnKeyType="next"
+                onSubmitEditing={() => passwordRef.current?.focus()}
                 onFocus={() => setFocusedInput("identifier")}
                 onBlur={() => setFocusedInput(null)}
               />
@@ -128,12 +133,15 @@ export default function LoginScreen() {
                 style={styles.inputIcon}
               />
               <TextInput
+                ref={passwordRef}
                 style={styles.input}
                 placeholder="••••••••"
                 placeholderTextColor="#94a3b8"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={!showPassword}
+                returnKeyType="go"
+                onSubmitEditing={handleLogin}
                 onFocus={() => setFocusedInput("password")}
                 onBlur={() => setFocusedInput(null)}
               />

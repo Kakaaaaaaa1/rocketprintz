@@ -32,6 +32,7 @@ import {
   writeBatch
 } from "firebase/firestore";
 
+import SearchBar, { matchesSearch } from "../../components/SearchBar";
 import { db } from "../../firebase/config";
 
 // ======================================================
@@ -182,6 +183,11 @@ const parseInputDate = (value: string) => {
 export default function AdminOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  const filteredOrders = orders.filter((order) =>
+    matchesSearch(search, order.orderCode, order.customerName, order.product)
+  );
 
   const [modalVisible, setModalVisible] =
     useState(false);
@@ -467,10 +473,6 @@ export default function AdminOrders() {
           }
         );
 
-        console.log(
-          "Order created:",
-          orderCode
-        );
       }
 
       // --------------------------------------------
@@ -570,10 +572,6 @@ export default function AdminOrders() {
 
       // Jalankan semua penghapusan
       await batch.commit();
-
-      console.log(
-        "Order dan planning terkait berhasil dihapus"
-      );
 
       // Tutup modal web
       setDeleteModalVisible(false);
@@ -1002,8 +1000,14 @@ export default function AdminOrders() {
           LIST ORDERS
       ================================================ */}
 
+      <SearchBar
+        value={search}
+        onChangeText={setSearch}
+        placeholder="Cari kode order, customer, atau produk..."
+      />
+
       <FlatList
-        data={orders}
+        data={filteredOrders}
         keyExtractor={(item) =>
           item.id
         }
@@ -1011,7 +1015,7 @@ export default function AdminOrders() {
           renderOrder
         }
         contentContainerStyle={
-          orders.length === 0
+          filteredOrders.length === 0
             ? styles.emptyContainer
             : styles.list
         }
@@ -1029,7 +1033,7 @@ export default function AdminOrders() {
                 styles.emptyTitle
               }
             >
-              Belum Ada Order
+              {search ? "Order Tidak Ditemukan" : "Belum Ada Order"}
             </Text>
 
             <Text
@@ -1037,9 +1041,9 @@ export default function AdminOrders() {
                 styles.emptySubtitle
               }
             >
-              Klik tombol "+ Tambah"
-              untuk memasukkan
-              orderan baru.
+              {search
+                ? "Coba gunakan kata kunci yang berbeda."
+                : 'Klik tombol "+ Tambah" untuk memasukkan orderan baru.'}
             </Text>
           </View>
         }

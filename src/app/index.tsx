@@ -1,6 +1,7 @@
 import { Redirect } from "expo-router";
 import {
   ActivityIndicator,
+  Pressable,
   Text,
   View,
 } from "react-native";
@@ -12,7 +13,22 @@ export default function Index() {
     user,
     profile,
     loading,
+    logout,
   } = useAuth();
+
+  // Tombol keluar untuk akun yang profilnya tidak valid
+  const logoutButton = (
+    <Pressable
+      style={styles.button}
+      onPress={() => {
+        logout().catch(() => undefined);
+      }}
+    >
+      <Text style={styles.buttonText}>
+        Keluar
+      </Text>
+    </Pressable>
+  );
 
   // Tunggu Firebase Auth + profile Firestore selesai
   if (loading) {
@@ -38,13 +54,14 @@ export default function Index() {
     return (
       <View style={styles.container}>
         <Text style={styles.error}>
-          Profile pengguna tidak ditemukan.
+          Akun belum terdaftar di sistem.
         </Text>
 
         <Text style={styles.text}>
-          Pastikan dokumen users/{user.uid} ada
-          di Firestore dan memiliki field role.
+          Hubungi Admin untuk mendaftarkan akun Anda.
         </Text>
+
+        {logoutButton}
       </View>
     );
   }
@@ -74,12 +91,14 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <Text style={styles.error}>
-        Role pengguna tidak dikenali.
+        Peran akun tidak dikenali.
       </Text>
 
       <Text style={styles.text}>
-        Role saat ini: {String(profile.role)}
+        Hubungi Admin untuk mengatur peran akun Anda.
       </Text>
+
+      {logoutButton}
     </View>
   );
 }
@@ -102,5 +121,18 @@ const styles = {
     fontSize: 18,
     fontWeight: "700" as const,
     textAlign: "center" as const,
+  },
+
+  button: {
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 28,
+    borderRadius: 10,
+    backgroundColor: "#0f172a",
+  },
+
+  buttonText: {
+    color: "#ffffff",
+    fontWeight: "700" as const,
   },
 };

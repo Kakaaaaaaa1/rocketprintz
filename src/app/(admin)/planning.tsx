@@ -26,6 +26,28 @@ import PlanningUI, {
   PlanningUIOrder,
 } from "../../components/ui/planning-ui";
 
+// Mengubah Date menjadi teks YYYY-MM-DD
+// berdasarkan tanggal lokal perangkat.
+const formatLocalDate = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
+// Mengubah teks YYYY-MM-DD menjadi Date lokal
+// (pukul 00.00 waktu perangkat).
+const parseLocalDate = (value: string) => {
+  const [year, month, day] = value.split("-").map(Number);
+
+  if (!year || !month || !day) {
+    return new Date();
+  }
+
+  return new Date(year, month - 1, day);
+};
+
 export default function PlanningPage() {
   const { width } = useWindowDimensions();
 
@@ -175,6 +197,39 @@ export default function PlanningPage() {
     ]);
 
   // ====================================================
+  // DATA PLANNING DENGAN DATA ORDER TERBARU
+  // Data order dan nama operator diambil dari koleksi
+  // orders dan users agar ikut berubah ketika diedit.
+  // ====================================================
+
+  const planningView =
+    useMemo(() => {
+      return planning.map((item) => {
+        const order = orders.find(
+          (o) => o.id === item.orderId
+        );
+
+        const operator = operators.find(
+          (op) => op.id === item.operatorId
+        );
+
+        return {
+          ...item,
+          orderCode:
+            order?.orderCode ?? item.orderCode,
+          customerName:
+            order?.customerName ?? item.customerName,
+          product:
+            order?.product ?? item.product,
+          quantity:
+            order?.quantity ?? item.quantity,
+          operatorName:
+            operator?.name ?? item.operatorName,
+        };
+      });
+    }, [planning, orders, operators]);
+
+  // ====================================================
   // SELECTED
   // ====================================================
 
@@ -199,7 +254,7 @@ export default function PlanningPage() {
     setOrderId("");
     setMachine("");
     setOperatorId("");
-    setScheduledDate(new Date());
+    setScheduledDate(parseLocalDate(formatLocalDate(new Date())));
     setStatus("planned");
     setShowDatePicker(false);
     setActivePicker(null);
@@ -308,10 +363,12 @@ export default function PlanningPage() {
           selectedOperator?.name ??
           "",
 
+        // Format tanggal lokal (YYYY-MM-DD) agar
+        // tidak bergeser karena zona waktu WIB
         scheduledDate:
-          scheduledDate
-            .toISOString()
-            .split("T")[0],
+          formatLocalDate(
+            scheduledDate
+          ),
 
         status,
 
@@ -373,7 +430,7 @@ export default function PlanningPage() {
 
     setScheduledDate(
       item.scheduledDate
-        ? new Date(
+        ? parseLocalDate(
             item.scheduledDate
           )
         : new Date()
@@ -458,7 +515,7 @@ export default function PlanningPage() {
       <PlanningUI
         width={width}
 
-        planning={planning}
+        planning={planningView}
         availableOrders={
           availableOrders
         }

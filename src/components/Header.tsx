@@ -127,17 +127,26 @@ export default function Header() {
             label="Home"
             icon="grid-outline"
             activeIcon="grid"
-            active={pathname === "/"}
+            active={
+              pathname === "/" ||
+              pathname === "/admin" ||
+              pathname === "/operator" ||
+              pathname === "/supervisor"
+            }
             onPress={() => router.push("/")}
           />
 
           {/* ORDERS */}
 
           <HeaderItem
-            label={userRole === "operator" ? "Running" : "Orders"}
-            icon={userRole === "operator" ? "play-circle-outline" : "receipt-outline"}
-            activeIcon={userRole === "operator" ? "play-circle" : "receipt"}
-            active={userRole === "operator" ? isActive("running") : isActive("orders")}
+            label="Orders"
+            icon="receipt-outline"
+            activeIcon="receipt"
+            active={
+              userRole === "operator"
+                ? isActive("running")
+                : isActive("orders")
+            }
             onPress={() => {
               if (userRole === "supervisor") {
                 router.push("/(supervisor)/orders");
@@ -184,6 +193,23 @@ export default function Header() {
                 } else {
                   router.push("/(admin)/materials");
                 }
+              }}
+            />
+          )}
+
+          {/* =================================================
+              USERS
+              KHUSUS ADMIN
+          ================================================= */}
+
+          {userRole === "admin" && (
+            <HeaderItem
+              label="Users"
+              icon="people-outline"
+              activeIcon="people"
+              active={isActive("users")}
+              onPress={() => {
+                router.push("/(admin)/users");
               }}
             />
           )}
