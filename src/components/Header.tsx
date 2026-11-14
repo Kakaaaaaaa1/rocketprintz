@@ -136,12 +136,12 @@ export default function Header() {
             onPress={() => router.push("/")}
           />
 
-          {/* ORDERS */}
+          {/* ORDERS (Admin & Supervisor) / RUNNING (Operator) */}
 
           <HeaderItem
-            label="Orders"
-            icon="receipt-outline"
-            activeIcon="receipt"
+            label={userRole === "operator" ? "Running" : "Orders"}
+            icon={userRole === "operator" ? "play-circle-outline" : "receipt-outline"}
+            activeIcon={userRole === "operator" ? "play-circle" : "receipt"}
             active={
               userRole === "operator"
                 ? isActive("running")
